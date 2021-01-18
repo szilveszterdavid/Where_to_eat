@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroung"
+    tools:context=".fragments.ProfilFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/first_layout_id"
+        android:layout_width="409dp"
+        android:layout_height="205dp"
+        android:padding="10dp"
+        tools:ignore="MissingConstraints">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_picture_id"
+            android:layout_width="155dp"
+            android:layout_height="155dp"
+            app:cardCornerRadius="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="MissingConstraints">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="250dp">
+
+                <ImageView
+                    android:layout_width="153dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile_picture" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/profil_name_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/profile_picture_id"
+            tools:layout_editor_absoluteX="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/profil_address_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:drawableStart="@drawable/ic_baseline_location_on_24"
+        android:drawablePadding="10dp"
+        android:paddingTop="20dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@+id/first_layout_id"
+        tools:layout_editor_absoluteX="35dp" />
+
+    <TextView
+        android:id="@+id/profil_phone_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:drawableStart="@drawable/ic_baseline_local_phone_24"
+        android:drawablePadding="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@+id/profil_address_id"
+        tools:layout_editor_absoluteX="-12dp" />
+
+    <TextView
+        android:id="@+id/profil_email_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:drawableStart="@drawable/ic_baseline_email_24"
+        android:drawablePadding="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@+id/profil_phone_id"
+        tools:layout_editor_absoluteX="35dp" />
+
+    <TextView
+        android:id="@+id/profil_favourite_restaurants_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favourite restaurants"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="italic"
+        android:paddingTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profil_email_id" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
