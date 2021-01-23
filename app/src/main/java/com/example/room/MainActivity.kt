@@ -22,41 +22,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Actionbar eltüntetése
+
         supportActionBar?.hide()
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-
-        /*
-        viewModel.getCities()
-
-        viewModel.myResponseCities.observe(this, Observer { response ->
-            Log.d("Response", response.cities[0])
-        })
-        */
-
-
-
-        /*
-
-        viewModel.getCountries()
-
-        viewModel.myResponseCountries.observe(this, Observer { response ->
-            Log.d("Response", response.count.toString())
-            Log.d("Response", response.countries[0])
-        })
-        */
-
-
-
-        viewModel.getRestaurants()
-
-        viewModel.myResponseRestaurants.observe(this, Observer { response ->
-            Log.d("Response", response.restaurants[0].image_url)
-        })
-        
-
 
         //setupActionBarWithNavController(findNavController(R.id.fragment))
 

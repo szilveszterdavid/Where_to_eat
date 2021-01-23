@@ -46,13 +46,19 @@ class RestaurantFragment : Fragment() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
+        // vendéglők adatainak lekérése
+
         viewModel.getRestaurants()
 
         viewModel.myResponseRestaurants.observe(viewLifecycleOwner, Observer { response ->
 
+            // a kiválasztott vendéglőhöz tartozó kép betöltése
+
             Glide.with(view.this_restaurant_image_id)
                 .load(response.restaurants[restaurantId].image_url)
                 .into(view.this_restaurant_image_id)
+
+            // a kiválasztott vendéglőhöz tartozó adatok
 
             view.this_restaurant_name_id.text = response.restaurants[restaurantId].name
             view.this_restaurant_address_id.text = "Address: " + response.restaurants[restaurantId].address
