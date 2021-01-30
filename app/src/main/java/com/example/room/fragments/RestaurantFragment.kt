@@ -30,8 +30,12 @@ class RestaurantFragment : Fragment() {
 
     val REQUEST_PHONE_CALL = 1
 
+    // a vendéglő telefonszáma és linkje
+
     var phoneNumber = ""
     var url = ""
+
+    // az adatokat felhasználom a Google térképnél
 
     companion object {
         var lat = 1.1
@@ -76,6 +80,8 @@ class RestaurantFragment : Fragment() {
             view.this_restaurant_postal_code_id.text = "Postal code: " + response.restaurants[restaurantId].postal_code
             view.this_restaurant_country_id.text = "Country: " + response.restaurants[restaurantId].country
 
+            // ezeket az adatokat használom a híváshoz, weblaphoz és térképhez
+
             phoneNumber = response.restaurants[restaurantId].phone
             lat = response.restaurants[restaurantId].lat
             lng = response.restaurants[restaurantId].lng
@@ -84,8 +90,9 @@ class RestaurantFragment : Fragment() {
 
         })
 
+        // hívás
+
         view.this_restaurant_call_id.setOnClickListener {
-            /*
             if(ActivityCompat.checkSelfPermission(view.context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(
                     this.requireActivity(),
@@ -95,16 +102,18 @@ class RestaurantFragment : Fragment() {
             } else {
                 startCall()
             }
-            */
-
             startCall()
         }
+
+        // térkép
 
         view.this_restaurant_locate_id.setOnClickListener {
 
             findNavController().navigate(R.id.action_restaurantFragment_to_mapsFragment)
 
         }
+
+        // weboldal
 
         view.this_restaurant_website_id.setOnClickListener {
             val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -116,6 +125,8 @@ class RestaurantFragment : Fragment() {
         return view
     }
 
+    // hívás indítása
+
     private fun startCall() {
         val callIntent = Intent(Intent.ACTION_CALL)
 
@@ -123,9 +134,9 @@ class RestaurantFragment : Fragment() {
 
         startActivity(callIntent)
     }
-    /*
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_PHONE_CALL) startCall()
     }
-*/
+
 }

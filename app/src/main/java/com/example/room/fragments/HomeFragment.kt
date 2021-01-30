@@ -43,6 +43,8 @@ class HomeFragment : Fragment() {
         return view
     }
 
+    // bejelentkezés
+
     private fun login() {
         val email = sign_in_email_id.text.toString()
         val password = sign_in_password_id.text.toString()
@@ -53,6 +55,9 @@ class HomeFragment : Fragment() {
             idPerson = mUserViewModel.thisPersonId(email)
             findNavController().navigate(R.id.action_homeFragment_to_mainFragment)
         } else {
+
+            // nincs ilyen felhasználó
+
             Toast.makeText(requireContext(), "Error login!", Toast.LENGTH_LONG).show()
         }
     }

@@ -29,6 +29,8 @@ class ProfilFragment : Fragment() {
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+        // felhasználó adatainak betöltése
+
         view.profil_name_id.text = mUserViewModel.thisPersonFirstName(idPerson) + mUserViewModel.thisPersonLastName(
             idPerson)
 

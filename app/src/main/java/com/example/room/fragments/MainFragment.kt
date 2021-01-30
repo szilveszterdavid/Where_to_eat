@@ -72,9 +72,13 @@ class MainFragment : Fragment(), Adapter.OnItemClickListener {
         return view
     }
 
+    // egy vendéglő megjelenítése
+
     override fun onItemClick(position: Int) {
 
         restaurantId = position
+
+        // átvisz a részletes oldalra
 
         findNavController().navigate(R.id.action_mainFragment_to_restaurantFragment)
 

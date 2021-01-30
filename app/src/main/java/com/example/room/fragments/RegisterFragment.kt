@@ -35,9 +35,13 @@ class RegisterFragment : Fragment() {
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+        // regisztráció
+
         view.sign_up_button.setOnClickListener{
             insertDataToDatabase()
         }
+
+        // jelszó elrejtése, megjelenítése
 
         view.show_pass_id.setOnClickListener {
             mIsShowPass = !mIsShowPass
@@ -66,7 +70,7 @@ class RegisterFragment : Fragment() {
         val password = addPassword_Et.text.toString()
         val phone = addPhoneNumber_et.text.toString()
         if(inputCheck(firstName, lastName, address, email, password, phone)){
-            // Create User Object
+            // felhasználó létrehozása
             val user = User(
                 0,
                 firstName,
@@ -77,16 +81,22 @@ class RegisterFragment : Fragment() {
                 phone
             )
 
-            // Add Data to Database
+            // felhasználó hozzáadása az adatbázishoz
+
             mUserViewModel.addUser(user)
             Toast.makeText(requireContext(), "Successfully registered!", Toast.LENGTH_LONG).show()
 
-            // Navigate Back
+            // regisztráció után visszaugrunk az előző oldalra
             findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
         } else {
+
+            // nincs kitöltve minden mező
+
             Toast.makeText(requireContext(), "Please fill out all fields!", Toast.LENGTH_LONG).show()
         }
     }
+
+    // regisztrációs adatok tesztelése
 
     private fun inputCheck(firstName: String, lastName: String, address: String, email: String, password: String, phone: String): Boolean{
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && address.isEmpty() && email.isEmpty() && password.isEmpty() && phone.isEmpty())
