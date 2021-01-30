@@ -78,7 +78,6 @@ class MainFragment : Fragment(), Adapter.OnItemClickListener {
 
         findNavController().navigate(R.id.action_mainFragment_to_restaurantFragment)
 
-        //Toast.makeText(this.context, "Item $position clicked", Toast.LENGTH_SHORT).show()
         val clickedItem: Restaurant = viewModel.restaurantList[position]
     }
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.room.MainViewModel
 import com.example.room.MainViewModelFactory
@@ -30,9 +31,13 @@ class RestaurantFragment : Fragment() {
     val REQUEST_PHONE_CALL = 1
 
     var phoneNumber = ""
-    var lat = ""
-    var lng = ""
     var url = ""
+
+    companion object {
+        var lat = 1.1
+        var lng = 1.1
+        var name = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,13 +77,15 @@ class RestaurantFragment : Fragment() {
             view.this_restaurant_country_id.text = "Country: " + response.restaurants[restaurantId].country
 
             phoneNumber = response.restaurants[restaurantId].phone
-            lat = response.restaurants[restaurantId].lat.toString()
-            lng = response.restaurants[restaurantId].lng.toString()
+            lat = response.restaurants[restaurantId].lat
+            lng = response.restaurants[restaurantId].lng
             url = response.restaurants[restaurantId].reserve_url
+            name = response.restaurants[restaurantId].area
 
         })
 
         view.this_restaurant_call_id.setOnClickListener {
+            /*
             if(ActivityCompat.checkSelfPermission(view.context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(
                     this.requireActivity(),
@@ -88,17 +95,22 @@ class RestaurantFragment : Fragment() {
             } else {
                 startCall()
             }
+            */
+
+            startCall()
         }
 
         view.this_restaurant_locate_id.setOnClickListener {
-            val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo: $lat, $lng"))
 
-            mapIntent.setPackage("com.google.android.apps.maps");
+            findNavController().navigate(R.id.action_restaurantFragment_to_mapsFragment)
 
-            startActivity(mapIntent)
         }
 
+        view.this_restaurant_website_id.setOnClickListener {
+            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
+            startActivity(webIntent)
+        }
 
         // Inflate the layout for this fragment
         return view
@@ -111,9 +123,9 @@ class RestaurantFragment : Fragment() {
 
         startActivity(callIntent)
     }
-
+    /*
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_PHONE_CALL) startCall()
     }
-
+*/
 }
