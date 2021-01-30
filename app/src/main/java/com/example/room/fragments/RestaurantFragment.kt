@@ -30,6 +30,9 @@ class RestaurantFragment : Fragment() {
     val REQUEST_PHONE_CALL = 1
 
     var phoneNumber = ""
+    var lat = ""
+    var lng = ""
+    var url = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +72,9 @@ class RestaurantFragment : Fragment() {
             view.this_restaurant_country_id.text = "Country: " + response.restaurants[restaurantId].country
 
             phoneNumber = response.restaurants[restaurantId].phone
+            lat = response.restaurants[restaurantId].lat.toString()
+            lng = response.restaurants[restaurantId].lng.toString()
+            url = response.restaurants[restaurantId].reserve_url
 
         })
 
@@ -83,6 +89,16 @@ class RestaurantFragment : Fragment() {
                 startCall()
             }
         }
+
+        view.this_restaurant_locate_id.setOnClickListener {
+            val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo: $lat, $lng"))
+
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            startActivity(mapIntent)
+        }
+
+
 
         // Inflate the layout for this fragment
         return view

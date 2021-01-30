@@ -1,10 +1,14 @@
 package com.example.room.fragments
 
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers.update
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.*
+import android.widget.EditText
+import android.widget.SearchView
+import android.widget.SearchView.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,16 +19,23 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.*
+import com.example.room.model.Cities
+import com.example.room.model.Countries
 import com.example.room.model.Restaurant
 import com.example.room.repository.Repository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.main_fragment.view.*
+import java.util.*
 
 class MainFragment : Fragment(), Adapter.OnItemClickListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var recyclerView: RecyclerView
+
+    private lateinit var itemList: MutableList<Restaurant>
+
+    private lateinit var adapter: Adapter
 
     companion object {
         var restaurantId = -1
@@ -58,7 +69,6 @@ class MainFragment : Fragment(), Adapter.OnItemClickListener {
         view.restauants_id.layoutManager = LinearLayoutManager(this.context)
         view.restauants_id.setHasFixedSize(true)
 
-
         return view
     }
 
@@ -71,4 +81,6 @@ class MainFragment : Fragment(), Adapter.OnItemClickListener {
         //Toast.makeText(this.context, "Item $position clicked", Toast.LENGTH_SHORT).show()
         val clickedItem: Restaurant = viewModel.restaurantList[position]
     }
+
+
 }
