@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -53,7 +54,10 @@ class HomeFragment : Fragment() {
 
         if(databasePassword == password){
             idPerson = mUserViewModel.thisPersonId(email)
-            findNavController().navigate(R.id.action_homeFragment_to_mainFragment)
+
+            val transaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment, MainFragment())
+            transaction.commit()
         } else {
 
             // nincs ilyen felhasználó

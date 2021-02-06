@@ -1,5 +1,6 @@
 package com.example.room.repository
 
+import retrofit2.Response
 import com.example.room.api.RetrofitInstance
 import com.example.room.model.Cities
 import com.example.room.model.Countries
@@ -17,6 +18,10 @@ class Repository {
 
     suspend fun getRestaurants(): Restaurants {
         return RetrofitInstance.api.getRestaurants()
+    }
+
+    suspend fun getAllRestaurants(country:String, page:Int): Response<Restaurants> {
+        return RetrofitInstance.api.getAllRestaurants(country, page)
     }
 
 }

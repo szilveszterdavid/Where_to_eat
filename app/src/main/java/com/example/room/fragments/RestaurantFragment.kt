@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,7 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.room.MainViewModel
 import com.example.room.MainViewModelFactory
 import com.example.room.R
-import com.example.room.fragments.MainFragment.Companion.restaurantId
+import com.example.room.model.Restaurant
 import com.example.room.repository.Repository
 import com.example.room.viewmodel.UserViewModel
 import kotlinx.android.synthetic.main.fragment_restaurant.*
@@ -54,41 +55,35 @@ class RestaurantFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_restaurant, container, false)
 
-        val repository = Repository()
-        val viewModelFactory = MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        // lekérem a "restaurant" kulcson keresztül azt a vendéglőt, amelyikre rákantittottam
 
-        // vendéglők adatainak lekérése
-
-        viewModel.getRestaurants()
-
-        viewModel.myResponseRestaurants.observe(viewLifecycleOwner, Observer { response ->
+        val restaurant = arguments?.getParcelable<Restaurant>("restaurant")!!
 
             // a kiválasztott vendéglőhöz tartozó kép betöltése
 
             Glide.with(view.this_restaurant_image_id)
-                .load(response.restaurants[restaurantId].image_url)
+                .load(restaurant.image_url)
                 .into(view.this_restaurant_image_id)
 
             // a kiválasztott vendéglőhöz tartozó adatok
 
-            view.this_restaurant_name_id.text = response.restaurants[restaurantId].name
-            view.this_restaurant_address_id.text = "Address: " + response.restaurants[restaurantId].address
-            view.this_restaurant_city_id.text = "City: " + response.restaurants[restaurantId].city
-            view.this_restaurant_state_id.text = "State: " + response.restaurants[restaurantId].state
-            view.this_restaurant_area_id.text = "Area: " + response.restaurants[restaurantId].area
-            view.this_restaurant_postal_code_id.text = "Postal code: " + response.restaurants[restaurantId].postal_code
-            view.this_restaurant_country_id.text = "Country: " + response.restaurants[restaurantId].country
+            view.this_restaurant_name_id.text = restaurant.name
+            view.this_restaurant_address_id.text = "Address: " + restaurant.address
+            view.this_restaurant_city_id.text = "City: " + restaurant.city
+            view.this_restaurant_state_id.text = "State: " + restaurant.state
+            view.this_restaurant_area_id.text = "Area: " + restaurant.area
+            view.this_restaurant_postal_code_id.text = "Postal code: " + restaurant.postal_code
+            view.this_restaurant_country_id.text = "Country: " + restaurant.country
 
             // ezeket az adatokat használom a híváshoz, weblaphoz és térképhez
 
-            phoneNumber = response.restaurants[restaurantId].phone
-            lat = response.restaurants[restaurantId].lat
-            lng = response.restaurants[restaurantId].lng
-            url = response.restaurants[restaurantId].reserve_url
-            name = response.restaurants[restaurantId].area
+            phoneNumber = restaurant.phone
+            lat = restaurant.lat
+            lng = restaurant.lng
+            url = restaurant.reserve_url
+            name = restaurant.area
 
-        })
+       // })
 
         // hívás
 
@@ -109,7 +104,11 @@ class RestaurantFragment : Fragment() {
 
         view.this_restaurant_locate_id.setOnClickListener {
 
-            findNavController().navigate(R.id.action_restaurantFragment_to_mapsFragment)
+            //findNavController().navigate(R.id.action_restaurantFragment_to_mapsFragment)
+
+            val transaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment, MapsFragment())
+            transaction.commit()
 
         }
 

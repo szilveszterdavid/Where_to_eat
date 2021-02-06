@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.provider.SyncStateContract.Helpers.update
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
-import android.widget.EditText
-import android.widget.SearchView
+import android.widget.*
 import android.widget.SearchView.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -19,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.*
+import com.example.room.Adapter
 import com.example.room.model.Cities
 import com.example.room.model.Countries
 import com.example.room.model.Restaurant
@@ -27,19 +27,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.main_fragment.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MainFragment : Fragment(), Adapter.OnItemClickListener {
+class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var recyclerView: RecyclerView
 
-    private lateinit var itemList: MutableList<Restaurant>
-
-    private lateinit var adapter: Adapter
-
-    companion object {
-        var restaurantId = -1
-    }
+    private var adapter: Adapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,39 +46,124 @@ class MainFragment : Fragment(), Adapter.OnItemClickListener {
 
     ): View? {
         // Inflate the layout for this fragment
+
         val view =  inflater.inflate(R.layout.main_fragment, container, false)
+
+        /**TextView for searching between the favorite items(search by price).*/
+        val search = view.findViewById<TextView>(R.id.search_bar)
+
+        // legördülő sáv a városokhoz
+
+        val spinner = view.findViewById<Spinner>(R.id.spinner) as CustomSearchableSpinner
+        val adapterSpinnerCity =
+            activity?.let {
+                ArrayAdapter(it, android.R.layout.simple_spinner_item, CitiesConstants.citiesList)
+            }
+
+        spinner.adapter = adapterSpinnerCity
+
+        // legördülő sáv az oldalszámokhoz
+        val pageNum = (1..10).toList()
+        val spinnerPage = view.findViewById<Spinner>(R.id.spinnerPage) //as CustomSearchableSpinner
+        val adapterSpinnerPage =
+            activity?.let {
+                ArrayAdapter(it, android.R.layout.simple_spinner_item, pageNum)
+            }
+        spinnerPage.adapter = adapterSpinnerPage
+
+        var emptyList: java.util.ArrayList<Restaurant> = arrayListOf()
+
+        adapter = context?.let { this.context?.let { it1 -> Adapter(emptyList,this, it1) } }
+
+        recyclerView = view.restauants_id
+        view.restauants_id.adapter = adapter
+        view.restauants_id.layoutManager = LinearLayoutManager(this.context)
+        view.restauants_id.setHasFixedSize(true)
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
+        // vendéglők listázása városok szerint, majd azon belül az oldalak száma szerint
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
 
-        viewModel.getRestaurants()
+            }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ){
+                // ha nincs kiválasztva az oldal
+                viewModel.getAllRestaurant(
+                    spinner.selectedItem.toString(),
+                    spinnerPage.selectedItem as Int
+                )
+                search.text = ""
 
-        viewModel.myResponseRestaurants.observe(viewLifecycleOwner, Observer { response ->
-            recyclerView.adapter = Adapter(response.restaurants, this)
-            viewModel.restaurantList.addAll(response.restaurants)
+                // város és oldal szerint
+                spinnerPage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ){
+                        viewModel.getAllRestaurant(
+                            spinner.selectedItem.toString(),
+                            spinnerPage.selectedItem as Int
+                        )
+                        search.text = ""
+                    }
+                }
+            }
+        }
+
+        var mainList: ArrayList<Restaurant> = arrayListOf()
+
+        // vendéglők frissítése
+        viewModel.myResponseAll.observe(viewLifecycleOwner, Observer { response ->
+            //if (response.isSuccess) {
+                if (response.body()?.restaurants!!.isNotEmpty()) {
+                    mainList = response.body()?.restaurants as ArrayList<Restaurant>
+                    adapter?.setData(mainList)
+                } else {
+                    Toast.makeText(context, "Not existing page!", Toast.LENGTH_SHORT).show()
+                    adapter?.setData(mutableListOf())
+                }
+            //}
         })
 
-        recyclerView = view.restauants_id
-        view.restauants_id.layoutManager = LinearLayoutManager(this.context)
-        view.restauants_id.setHasFixedSize(true)
+        // szűrés ár szerint
+        search.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isNotEmpty()) {
+                    adapter?.setData(mainList.filter {
+                        it.price.toString().toLowerCase(Locale.ROOT).contains(
+                            s.toString().toLowerCase(
+                                Locale.ROOT
+                            )
+                        )
+                    } as MutableList<Restaurant>)
+
+                } else {
+                    adapter?.setData(mainList)
+                }
+            }
+        })
+
 
         return view
     }
-
-    // egy vendéglő megjelenítése
-
-    override fun onItemClick(position: Int) {
-
-        restaurantId = position
-
-        // átvisz a részletes oldalra
-
-        findNavController().navigate(R.id.action_mainFragment_to_restaurantFragment)
-
-        val clickedItem: Restaurant = viewModel.restaurantList[position]
-    }
-
 
 }

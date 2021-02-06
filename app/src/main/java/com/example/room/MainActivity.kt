@@ -11,12 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.room.MainViewModel
-import com.example.room.fragments.MainFragment
-import com.example.room.fragments.ProfilFragment
-import com.example.room.fragments.RegisterFragment
+import com.example.room.fragments.*
 import com.example.room.repository.Repository
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_fragment.*
+import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,16 +26,37 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val homeFragment = HomeFragment()
+        val mainFragment = MainFragment()
+        val mapsFragment = MapsFragment()
+        val profilFragment = ProfilFragment()
+        val registerFragment = RegisterFragment()
+        val restaurantFragment = RestaurantFragment()
+
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
-    }
+        viewModel.getCities()
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.fragment)
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
+        viewModel.myResponseCities.observe(this, Observer { response ->
+            CitiesConstants.citiesList = response.cities as ArrayList<String>
+        })
 
+        /**Setting up the navigation logic.*/
+        bottom_navigation.setOnNavigationItemSelectedListener {
+            var selectedFragment: Fragment = homeFragment
+            when (it.itemId) {
+                R.id.ic_home -> selectedFragment = mainFragment
+                R.id.ic_favorite -> selectedFragment = profilFragment
+                R.id.ic_settings -> selectedFragment = profilFragment
+            }
+
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment, selectedFragment)
+            transaction.commit()
+            return@setOnNavigationItemSelectedListener true
+        }
+    }
 }
 
