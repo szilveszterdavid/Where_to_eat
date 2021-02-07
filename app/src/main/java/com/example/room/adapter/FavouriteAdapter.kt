@@ -41,18 +41,18 @@ class FavouriteAdapter (
 
         holder.itemView.setOnLongClickListener {
             val builder = AlertDialog.Builder(holder.itemView.context)
-            builder.setMessage("Are you sure you want to Delete?")
+            builder.setMessage("Delete?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { _, _ ->
-                    /**Removing the junction row from the database.*/
+
+                    // kitörlöm a kedvencek közül a vendéglőt
+
                     daoViewModel.deleteCrossDB(List[position].id, Constants.idPerson)
 
-                    /**Removing the restaurant from the adapter's list*/
                     List.removeAt(position)
                     notifyItemRemoved(position)
                     notifyDataSetChanged()
 
-                    Toast.makeText(holder.itemView.context, "Item deleted!", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton("No") { dialog, _ ->
                     dialog.dismiss()

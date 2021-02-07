@@ -1,6 +1,8 @@
 package com.example.room.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.room.model.Restaurant
 import kotlinx.android.synthetic.main.fragment_restaurant.view.*
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.observe
 import com.example.room.*
 import com.example.room.constants.Constants
@@ -25,6 +28,7 @@ class RestaurantFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var daoViewModel: DaoViewModel
+    private var REQUEST_PHONE_CALL = 1
 
     // a vendéglő telefonszáma és linkje
 
@@ -83,7 +87,11 @@ class RestaurantFragment : Fragment() {
         // hívás
 
         view.this_restaurant_call_id.setOnClickListener {
-            startCall()
+            if(ActivityCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(Manifest.permission.CALL_PHONE), REQUEST_PHONE_CALL)
+            } else {
+                startCall()
+            }
         }
 
         // térkép
@@ -109,18 +117,22 @@ class RestaurantFragment : Fragment() {
 
             daoViewModel.addRestaurantDB(restaurant)
 
-            var flag: Boolean = false
+            var isFavourite: Boolean = false
             daoViewModel.readAllCross.observe(viewLifecycleOwner) { cross ->
+
+                // megnézem, hogy kedvenc vendéglő e már vagy sem
 
                 for (v in cross) {
                     if (v.id == restaurant.id && v.userID == Constants.idPerson) {
-                        flag = true
+                        isFavourite = true
                         break
                     }
                 }
 
-                if (!flag) {
-                    val crossID: Int = Random().nextInt(100000)
+                // ha nincs hozzaadva a kedvencekhez, akkor hozzáadom
+
+                if (!isFavourite) {
+                    val crossID: Int = Random().nextInt(1000)
                     Constants.restaurantList.add(restaurant)
                     daoViewModel.addUserRestaurantDB(
                         CrossTable(
@@ -129,7 +141,7 @@ class RestaurantFragment : Fragment() {
                             Constants.idPerson
                         )
                     )
-                    Toast.makeText(context, "Item added to favorites!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Favourite!", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -149,4 +161,9 @@ class RestaurantFragment : Fragment() {
         startActivity(callIntent)
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == REQUEST_PHONE_CALL) startCall()
+    }
+
 }
+

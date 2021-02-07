@@ -95,7 +95,7 @@ class MainFragment : Fragment() {
                 id: Long
             ){
                 // ha nincs kiválasztva az oldal
-                viewModel.getAllRestaurant(
+                viewModel.getRestaurants(
                     spinner.selectedItem.toString(),
                     spinnerPage.selectedItem as Int
                 )
@@ -112,7 +112,7 @@ class MainFragment : Fragment() {
                         position: Int,
                         id: Long
                     ){
-                        viewModel.getAllRestaurant(
+                        viewModel.getRestaurants(
                             spinner.selectedItem.toString(),
                             spinnerPage.selectedItem as Int
                         )
@@ -126,7 +126,6 @@ class MainFragment : Fragment() {
 
         // vendéglők frissítése
         viewModel.myResponseAll.observe(viewLifecycleOwner, Observer { response ->
-            //if (response.isSuccess) {
                 if (response.body()?.restaurants!!.isNotEmpty()) {
                     mainList = response.body()?.restaurants as ArrayList<Restaurant>
                     adapter?.setData(mainList)
@@ -134,7 +133,6 @@ class MainFragment : Fragment() {
                     Toast.makeText(context, "Not existing page!", Toast.LENGTH_SHORT).show()
                     adapter?.setData(mutableListOf())
                 }
-            //}
         })
 
         // szűrés ár szerint

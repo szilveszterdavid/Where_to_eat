@@ -22,7 +22,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getAllRestaurant(country:String, page:Int){
+    fun getRestaurants(country:String, page:Int){
         viewModelScope.launch {
             val response = repository.getAllRestaurants(country, page)
             myResponseAll.value = response
