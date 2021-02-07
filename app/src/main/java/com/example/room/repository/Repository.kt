@@ -12,7 +12,7 @@ class Repository {
         return RetrofitInstance.api.getCities()
     }
 
-    suspend fun getAllRestaurants(country:String, page:Int): Response<Restaurants> {
+    suspend fun getRestaurants(country:String, page:Int): Response<Restaurants> {
         return RetrofitInstance.api.getAllRestaurants(country, page)
     }
 

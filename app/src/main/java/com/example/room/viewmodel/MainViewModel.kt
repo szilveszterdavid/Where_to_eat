@@ -24,7 +24,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     fun getRestaurants(country:String, page:Int){
         viewModelScope.launch {
-            val response = repository.getAllRestaurants(country, page)
+            val response = repository.getRestaurants(country, page)
             myResponseAll.value = response
         }
     }
