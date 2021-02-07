@@ -2,11 +2,15 @@ package com.example.room.repository
 
 import androidx.lifecycle.LiveData
 import com.example.room.data.UserDao
+import com.example.room.model.CrossTable
+import com.example.room.model.Restaurant
 import com.example.room.model.User
 
 class UserRepository(private  val userDao: UserDao) {
 
     val readAllData: LiveData<List<User>> = userDao.readAllData()
+    val readAllRestaurant: LiveData<List<Restaurant>> = userDao.readAllRestaurant()
+    val readAllCrossTable: LiveData<List<CrossTable>> = userDao.readAllFavourite()
 
     suspend fun addUser(user: User){
         userDao.addUser(user)
@@ -38,6 +42,18 @@ class UserRepository(private  val userDao: UserDao) {
 
     fun thisPersonLastName(id: Int): String {
         return userDao.thisPersonLastName(id)
+    }
+
+    suspend fun addRestaurant(restaurant: Restaurant) {
+        userDao.addRestaurant(restaurant)
+    }
+
+    suspend fun addCrossTable(crossTable: CrossTable) {
+        userDao.addCrossTable(crossTable)
+    }
+
+    suspend fun deleteCrossTable(id: Int, userID: Int) {
+        userDao.deleteCrossTable(id, userID)
     }
 
 }

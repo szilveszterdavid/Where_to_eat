@@ -1,30 +1,23 @@
 package com.example.room.fragments
 
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.*
-import android.widget.SearchView.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.*
-import com.example.room.Adapter
-import com.example.room.model.Cities
-import com.example.room.model.Countries
+import com.example.room.adapter.Adapter
+import com.example.room.constants.Constants
 import com.example.room.model.Restaurant
 import com.example.room.repository.Repository
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.main_fragment.*
+import com.example.room.spinner.CustomSearchableSpinner
+import com.example.room.viewmodel.MainViewModel
+import com.example.room.viewmodel.MainViewModelFactory
 import kotlinx.android.synthetic.main.main_fragment.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,7 +42,6 @@ class MainFragment : Fragment() {
 
         val view =  inflater.inflate(R.layout.main_fragment, container, false)
 
-        /**TextView for searching between the favorite items(search by price).*/
         val search = view.findViewById<TextView>(R.id.search_bar)
 
         // legördülő sáv a városokhoz
@@ -57,7 +49,7 @@ class MainFragment : Fragment() {
         val spinner = view.findViewById<Spinner>(R.id.spinner) as CustomSearchableSpinner
         val adapterSpinnerCity =
             activity?.let {
-                ArrayAdapter(it, android.R.layout.simple_spinner_item, CitiesConstants.citiesList)
+                ArrayAdapter(it, android.R.layout.simple_spinner_item, Constants.citiesList)
             }
 
         spinner.adapter = adapterSpinnerCity
@@ -73,7 +65,13 @@ class MainFragment : Fragment() {
 
         var emptyList: java.util.ArrayList<Restaurant> = arrayListOf()
 
-        adapter = context?.let { this.context?.let { it1 -> Adapter(emptyList,this, it1) } }
+        adapter = context?.let { this.context?.let { it1 ->
+            Adapter(
+                emptyList,
+                this,
+                it1
+            )
+        } }
 
         recyclerView = view.restauants_id
         view.restauants_id.adapter = adapter
@@ -81,7 +79,8 @@ class MainFragment : Fragment() {
         view.restauants_id.setHasFixedSize(true)
 
         val repository = Repository()
-        val viewModelFactory = MainViewModelFactory(repository)
+        val viewModelFactory =
+            MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         // vendéglők listázása városok szerint, majd azon belül az oldalak száma szerint

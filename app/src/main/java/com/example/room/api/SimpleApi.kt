@@ -19,6 +19,8 @@ interface SimpleApi {
     @GET("restaurants")
     suspend fun getRestaurants(): Restaurants
 
+    // vendéglők lekérése város és oldal szerint
+
     @GET("/restaurants")
     suspend fun getAllRestaurants(
         @Query("city") city : String,

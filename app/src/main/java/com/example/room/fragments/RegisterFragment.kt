@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.room.R
@@ -51,6 +52,8 @@ class RegisterFragment : Fragment() {
         return view
     }
 
+    // jelszó megjelenítése és elrejtése
+
     private fun showPassword(isShow: Boolean) {
         if(isShow){
             addPassword_Et.transformationMethod = HideReturnsTransformationMethod.getInstance()
@@ -87,7 +90,11 @@ class RegisterFragment : Fragment() {
             Toast.makeText(requireContext(), "Successfully registered!", Toast.LENGTH_LONG).show()
 
             // regisztráció után visszaugrunk az előző oldalra
-            findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
+
+            val transaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment, HomeFragment())
+            transaction.commit()
+
         } else {
 
             // nincs kitöltve minden mező

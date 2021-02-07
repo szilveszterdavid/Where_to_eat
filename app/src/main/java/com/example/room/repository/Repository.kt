@@ -12,14 +12,6 @@ class Repository {
         return RetrofitInstance.api.getCities()
     }
 
-    suspend fun getCountries(): Countries {
-        return RetrofitInstance.api.getCountries()
-    }
-
-    suspend fun getRestaurants(): Restaurants {
-        return RetrofitInstance.api.getRestaurants()
-    }
-
     suspend fun getAllRestaurants(country:String, page:Int): Response<Restaurants> {
         return RetrofitInstance.api.getAllRestaurants(country, page)
     }

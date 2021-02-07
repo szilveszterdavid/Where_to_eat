@@ -2,6 +2,8 @@ package com.example.room.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.room.model.CrossTable
+import com.example.room.model.Restaurant
 import com.example.room.model.User
 
 @Dao
@@ -32,4 +34,23 @@ interface UserDao {
 
     @Query(value = "SELECT lastName FROM user_table where id = :id")
     fun thisPersonLastName(id: Int): String
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addRestaurant(restaurant: Restaurant)
+
+    @Query(value = "DELETE FROM restaurant WHERE id = :id")
+    suspend fun deleteRestaurant(id: Int)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addCrossTable(crossTable: CrossTable)
+
+    @Query(value = "DELETE FROM favourite WHERE id = :id AND userID = :userID")
+    suspend fun deleteCrossTable(id: Int, userID: Int)
+
+    @Query(value = "SELECT * FROM restaurant ORDER BY id ASC")
+    fun readAllRestaurant(): LiveData<List<Restaurant>>
+
+    @Query(value = "SELECT * FROM favourite ORDER BY id ASC")
+    fun readAllFavourite(): LiveData<List<CrossTable>>
+
 }

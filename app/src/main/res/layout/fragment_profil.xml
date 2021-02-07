@@ -37,7 +37,7 @@
                     android:layout_width="153dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/profile_picture" />
+                    android:src="@drawable/img_415067" />
 
             </androidx.cardview.widget.CardView>
 
@@ -106,7 +106,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profil_email_id" />
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_rest_rec"
+        android:layout_width="409dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profil_favourite_restaurants_id"
+        app:layout_constraintVertical_bias="0.627"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

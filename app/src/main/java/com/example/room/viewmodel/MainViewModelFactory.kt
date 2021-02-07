@@ -1,8 +1,7 @@
-package com.example.room
+package com.example.room.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.room.MainViewModel
 import com.example.room.repository.Repository
 
 class MainViewModelFactory (

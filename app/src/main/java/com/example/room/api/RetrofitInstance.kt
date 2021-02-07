@@ -7,7 +7,7 @@ object RetrofitInstance {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://ratpark-api.imok.space/")
+            .baseUrl("http://86.120.35.107:1680/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

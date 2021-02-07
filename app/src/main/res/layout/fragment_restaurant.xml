@@ -130,11 +130,9 @@
         android:layout_height="80dp"
         android:background="@drawable/ic_baseline_local_phone_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
-        app:layout_constraintHorizontal_bias="0.437"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/this_restaurant_country_id"
-        app:layout_constraintVertical_bias="0.49" />
+        app:layout_constraintVertical_bias="0.49"
+        tools:layout_editor_absoluteX="16dp" />
 
     <ImageButton
         android:id="@+id/this_restaurant_locate_id"
@@ -143,7 +141,6 @@
 
         android:background="@drawable/ic_baseline_location_on_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/this_restaurant_website_id"
         app:layout_constraintStart_toEndOf="@+id/this_restaurant_call_id"
         app:layout_constraintTop_toBottomOf="@+id/this_restaurant_country_id" />
 
@@ -154,9 +151,21 @@
 
         android:background="@drawable/ic_baseline_web_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/this_restaurant_locate_id"
         app:layout_constraintTop_toBottomOf="@+id/this_restaurant_country_id" />
 
+    <ImageButton
+        android:id="@+id/this_restaurant_favourite_id"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:background="@drawable/ic_baseline_favorite_border_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/this_restaurant_country_id"
+        app:layout_constraintVertical_bias="0.49" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
